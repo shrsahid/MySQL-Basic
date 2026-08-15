@@ -45,4 +45,5 @@ WHERE e.employment_status IN ('Resigned', 'Terminated')
 GROUP BY e.employee_id,e.first_name,d.department_name,
     e.salary,dept_avg.avg_salary
 ORDER BY d.department_name ASC,t_projects DESC,salary_gap ASC;
-    
+
+
