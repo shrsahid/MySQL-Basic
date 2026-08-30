@@ -1,5 +1,10 @@
 USE hr_training;
 
+-- Q2:- Find active employees who have been with the company at least 3 years and are currently paid more than 10% below the average salary for their exact job 
+-- title. Order your results so the longest-tenured, most underpaid people surface first
+
+
+
 -- Finding Employee who work at least 3 year in a company
 SELECT employee_id,timestampdiff(year,Hire_date,curdate()) AS Age
 FROM employees

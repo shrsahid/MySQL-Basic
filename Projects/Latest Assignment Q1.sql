@@ -1,5 +1,12 @@
 USE hr_training;
 
+-- Q1:- For every manager with at least 3 active direct reports, calculate their team's average performance rating and compare it to their own department's overall 
+-- average rating. Produce a ranked list of managers whose team underperforms their department average, and identify the single most concerning case. State 
+-- your minimum team-size threshold and justify why you chose it.
+
+
+
+
 -- Finding active department which have at least more than 3 people
 
 SELECT manager_id,department_id, COUNT(employee_id) direct_report
@@ -25,6 +32,8 @@ JOIN performance_reviews AS pr
 ON em.employee_id = pr.employee_id
 WHERE department_id IS NOT NULL
 GROUP BY department_id ;
+
+
 
 -- Finding team Avergae
 
@@ -77,6 +86,20 @@ ON team.department_id = dept.department_id
 ORDER BY rating_gap ;
 -- .........................-- 
 
+-- For identify finding the team_size avg
+SELECT ROUND(AVG(S.team_size),2)
+FROM(
+SELECT manager_id,department_id,AVG(rating) AS team_avg,COUNT( DISTINCT em.employee_id) team_size
+FROM employees AS em
+JOIN performance_reviews AS pr
+ON em.employee_id = pr.employee_id
+WHERE (department_id IS NOT NULL) AND (employment_status='Active')
+GROUP BY manager_id,department_id 
+HAVING team_size>3) S;
+
+
+
+
 
 
 -- Checking to find futher errors by some specific dept and manager id -- 
@@ -91,18 +114,4 @@ SELECT manager_id,COUNT(DISTINCT employee_id)
 FROM employees
 WHERE employment_status='Active'
 GROUP BY  manager_id;
-
-
--- For identify finding the team_size avg
-SELECT ROUND(AVG(S.team_size),2)
-FROM(
-SELECT manager_id,department_id,AVG(rating) AS team_avg,COUNT( DISTINCT em.employee_id) team_size
-FROM employees AS em
-JOIN performance_reviews AS pr
-ON em.employee_id = pr.employee_id
-WHERE (department_id IS NOT NULL) AND (employment_status='Active')
-GROUP BY manager_id,department_id 
-HAVING team_size>3) S
-
-
 
